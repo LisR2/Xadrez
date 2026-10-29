@@ -48,4 +48,4 @@ O projeto não utiliza bibliotecas ou serviços externos. As estatísticas ficam
 
 ## Licença
 
-Nenhuma licença foi definida neste repositório. Escolha e adicione uma licença antes de permitir reutilização ou redistribuição do código.
+Nenhuma licença foi definida neste repositório.
