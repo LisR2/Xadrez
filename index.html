@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#171b24">
+  <title>Xadrez — Duelo no tabuleiro</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="game">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Xadrez — início">
+        <span class="brand-icon" aria-hidden="true">♞</span>
+        <span>XADREZ<span class="brand-dot">.</span></span>
+      </a>
+      <span class="topbar-note">ESCOLHA SEU DESAFIO</span>
+    </header>
+
+    <div class="game-alert" id="game-alert" role="alert" aria-live="assertive" hidden></div>
+
+    <section class="layout" aria-label="Jogo de xadrez">
+      <div class="play-area">
+        <div class="player player-top">
+          <span class="avatar avatar-black" aria-hidden="true">♚</span>
+          <div class="player-info">
+            <span class="player-name" id="black-player-name">Pretas</span>
+            <span class="player-caption" id="black-player-caption">JOGADOR 2</span>
+          </div>
+          <span class="turn-indicator" id="black-indicator" aria-label="Aguardando a vez"></span>
+        </div>
+
+        <div class="board-frame">
+          <div class="rank-labels" id="rank-labels" aria-hidden="true"></div>
+          <div class="chessboard" id="board" role="grid" aria-label="Tabuleiro de xadrez"></div>
+          <div class="file-labels" id="file-labels" aria-hidden="true"></div>
+        </div>
+
+        <div class="player player-bottom">
+          <span class="avatar avatar-white" aria-hidden="true">♔</span>
+          <div class="player-info">
+            <span class="player-name" id="white-player-name">Brancas</span>
+            <span class="player-caption" id="white-player-caption">JOGADOR 1</span>
+          </div>
+          <span class="turn-indicator active" id="white-indicator" aria-label="Sua vez"></span>
+        </div>
+      </div>
+
+      <aside class="sidebar">
+        <div class="game-heading">
+          <p class="eyebrow">PARTIDA LOCAL</p>
+          <h1>Duelo no<br>tabuleiro<span>.</span></h1>
+          <p class="intro">Jogue com outra pessoa ou enfrente a inteligência artificial.</p>
+        </div>
+
+        <section class="settings-panel" aria-label="Configurações da partida">
+          <label class="setting-field" for="mode-select">
+            <span>Modo de jogo</span>
+            <select id="mode-select">
+              <option value="local">Dois jogadores</option>
+              <option value="ai">Contra a IA</option>
+            </select>
+          </label>
+          <label class="setting-field" id="difficulty-field" for="difficulty-select" hidden>
+            <span>Dificuldade</span>
+            <select id="difficulty-select">
+              <option value="easy">Fácil</option>
+              <option value="medium">Média</option>
+              <option value="hard">Difícil</option>
+            </select>
+          </label>
+          <p class="setting-hint">As opções escolhidas valem para a próxima partida.</p>
+        </section>
+
+        <div class="status-card" aria-live="polite">
+          <span class="status-icon" id="status-icon" aria-hidden="true">♟</span>
+          <div>
+            <p class="status-label" id="status-label">VEZ DAS BRANCAS</p>
+            <p class="status-message" id="status-message">Escolha uma peça para começar.</p>
+          </div>
+        </div>
+
+        <section class="moves-section" aria-labelledby="moves-title">
+          <div class="section-heading">
+            <h2 id="moves-title">Movimentos</h2>
+            <span class="move-count" id="move-count">0 lances</span>
+          </div>
+          <ol class="move-list" id="move-list" aria-live="polite">
+            <li class="empty-moves">A partida está pronta para começar.</li>
+          </ol>
+        </section>
+
+        <section class="stats-section" aria-labelledby="stats-title">
+          <div class="section-heading">
+            <h2 id="stats-title">Resumo das partidas</h2>
+            <span class="move-count">neste navegador</span>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-label" id="stat-wins-label">Vitórias brancas</span>
+              <strong class="stat-value" id="stat-wins">0</strong>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label" id="stat-losses-label">Vitórias pretas</span>
+              <strong class="stat-value" id="stat-losses">0</strong>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Empates</span>
+              <strong class="stat-value" id="stat-draws">0</strong>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Desistências</span>
+              <strong class="stat-value" id="stat-resignations">0</strong>
+            </div>
+          </div>
+          <p class="stats-notice" id="stats-notice" role="status"></p>
+        </section>
+
+        <div class="actions">
+          <button class="button button-secondary" id="undo-button" type="button" disabled>
+            <span aria-hidden="true">↶</span> Desfazer
+          </button>
+          <button class="button button-primary" id="restart-button" type="button">
+            <span aria-hidden="true">＋</span> Nova partida
+          </button>
+        </div>
+        <p class="keyboard-hint">Clique em uma peça e depois na casa de destino.</p>
+      </aside>
+    </section>
+
+    <footer class="footer">
+      <span>FEITO PARA JOGAR JUNTO</span>
+      <span>♙ &nbsp;♘ &nbsp;♗ &nbsp;♖ &nbsp;♕ &nbsp;♔</span>
+    </footer>
+  </main>
+
+  <div class="promotion-backdrop" id="promotion-dialog" hidden>
+    <section class="promotion-card" role="dialog" aria-modal="true" aria-labelledby="promotion-title">
+      <p class="eyebrow">QUASE LÁ</p>
+      <h2 id="promotion-title">Promova seu peão</h2>
+      <p>Escolha a peça que vai entrar no jogo.</p>
+      <div class="promotion-choices" id="promotion-choices"></div>
+    </section>
+  </div>
+</body>
+</html>
