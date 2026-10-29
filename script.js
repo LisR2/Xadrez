@@ -1,5 +1,6 @@
 "use strict";
 
+// Peças e convenções compartilhadas pelas regras e pela interface.
 const symbols = {
   white: { king: "♔", queen: "♕", rook: "♖", bishop: "♗", knight: "♘", pawn: "♙" },
   black: { king: "♚", queen: "♛", rook: "♜", bishop: "♝", knight: "♞", pawn: "♟" }
@@ -8,6 +9,7 @@ const pieceNames = { king: "rei", queen: "dama", rook: "torre", bishop: "bispo",
 const files = "abcdefgh";
 const promotionTypes = ["queen", "rook", "bishop", "knight"];
 
+// Referências aos elementos atualizados durante a partida.
 const boardElement = document.querySelector("#board");
 const rankLabels = document.querySelector("#rank-labels");
 const fileLabels = document.querySelector("#file-labels");
@@ -28,6 +30,8 @@ const statsNotice = document.querySelector("#stats-notice");
 
 const statsStorageKey = "chess-game-stats-v1";
 const pieceValues = { pawn: 100, knight: 320, bishop: 330, rook: 500, queen: 900, king: 20000 };
+
+// Estatísticas independentes para partidas locais e partidas contra a IA.
 const emptyStats = () => ({
   local: { whiteWins: 0, blackWins: 0, draws: 0, resignations: 0 },
   ai: { wins: 0, losses: 0, draws: 0, resignations: 0 }
@@ -39,6 +43,7 @@ let aiTimerId = null;
 let gameAlertTimerId = null;
 let stats = emptyStats();
 
+// Mostra avisos temporários, como o resultado de uma desistência.
 function showGameAlert(message) {
   if (gameAlertTimerId !== null) window.clearTimeout(gameAlertTimerId);
   gameAlert.textContent = message;
@@ -62,6 +67,7 @@ function hideGameAlert() {
   gameAlert.hidden = true;
 }
 
+// Criação e cópia dos dados da partida.
 function createPiece(type, color) {
   return { type, color, moved: false };
 }
@@ -101,6 +107,7 @@ function inside(row, col) {
   return row >= 0 && row < 8 && col >= 0 && col < 8;
 }
 
+// Regras do tabuleiro: ataques, xeque, material e movimentos legais.
 function findKing(board, color) {
   for (let row = 0; row < 8; row += 1) {
     for (let col = 0; col < 8; col += 1) {
@@ -282,6 +289,7 @@ function getPseudoMoves(board, row, col, enPassant) {
   return moves;
 }
 
+// Aplica lances ao tabuleiro e mantém os estados especiais do xadrez.
 function applyMove(board, move, promotion = "queen") {
   const piece = board[move.fromRow][move.fromCol];
   const captured = move.enPassant
@@ -326,6 +334,7 @@ function allLegalMoves(board, color, enPassant) {
   return moves;
 }
 
+// Avaliação material/posicional e busca minimax com poda alfa-beta para a IA.
 function nextEnPassant(piece, move) {
   return piece.type === "pawn" && Math.abs(move.toRow - move.fromRow) === 2
     ? { row: (move.toRow + move.fromRow) / 2, col: move.fromCol }
@@ -430,6 +439,7 @@ function chooseAiMove() {
   return bestMoves[Math.floor(Math.random() * bestMoves.length)];
 }
 
+// Renderização do tabuleiro, do histórico e dos indicadores da interface.
 function renderLabels() {
   rankLabels.replaceChildren();
   fileLabels.replaceChildren();
@@ -486,6 +496,7 @@ function renderBoard() {
   }
 }
 
+// Persistência local e apresentação dos resultados das partidas.
 function isValidStats(value) {
   if (!value || !value.local || !value.ai) return false;
   const requiredCounters = [
@@ -610,6 +621,7 @@ function renderMoves() {
   moveList.scrollTop = moveList.scrollHeight;
 }
 
+// Determina o estado da partida e atualiza as mensagens para os jogadores.
 function updateStatus() {
   const checked = isInCheck(state.board, state.turn);
   const possibleMoves = allLegalMoves(state.board, state.turn, state.enPassant);
@@ -670,6 +682,7 @@ function render() {
   renderStats();
 }
 
+// Entrada do jogador, notação dos lances e execução da resposta da IA.
 function handleSquareClick(row, col) {
   if (aiThinking || (state.mode === "ai" && state.turn === "black") || promotionDialog.hidden === false || state.finished) return;
   const piece = state.board[row][col];
@@ -761,6 +774,7 @@ function showPromotion(move, color) {
   promotionChoices.querySelector("button").focus();
 }
 
+// Inicia partidas e conecta os controles da página às ações do jogo.
 function startNewGame() {
   const resignationMessage = recordResignation();
   hideGameAlert();

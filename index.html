@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <!-- Metadados, título e arquivos locais necessários para iniciar o jogo. -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#171b24">
@@ -9,6 +10,7 @@
   <script src="script.js" defer></script>
 </head>
 <body>
+  <!-- Conteúdo principal: tabuleiro, informações e controles da partida. -->
   <main class="game">
     <header class="topbar">
       <a class="brand" href="#" aria-label="Xadrez — início">
@@ -21,6 +23,7 @@
     <div class="game-alert" id="game-alert" role="alert" aria-live="assertive" hidden></div>
 
     <section class="layout" aria-label="Jogo de xadrez">
+      <!-- Área do tabuleiro e identificação de quem está jogando. -->
       <div class="play-area">
         <div class="player player-top">
           <span class="avatar avatar-black" aria-hidden="true">♚</span>
@@ -47,6 +50,7 @@
         </div>
       </div>
 
+      <!-- Configurações, estado da partida, histórico, estatísticas e ações. -->
       <aside class="sidebar">
         <div class="game-heading">
           <p class="eyebrow">PARTIDA LOCAL</p>
@@ -135,6 +139,7 @@
     </footer>
   </main>
 
+  <!-- Diálogo exibido quando um peão alcança a última fileira. -->
   <div class="promotion-backdrop" id="promotion-dialog" hidden>
     <section class="promotion-card" role="dialog" aria-modal="true" aria-labelledby="promotion-title">
       <p class="eyebrow">QUASE LÁ</p>
